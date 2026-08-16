@@ -1,40 +1,39 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Produto } from './produto.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ProdutoService {
-  private readonly apiUrl = 'http://localhost:3000/api/products';
 
-  constructor(private readonly http: HttpClient) { }
+  private readonly API_URL = 'http://localhost:3000/api/products';
 
+  constructor(private http: HttpClient) { }
+
+  // 1. Listar todos os produtos
   listar(): Observable<Produto[]> {
-    // TODO: implementar GET /api/products
-    //return of([]);
-    return of({} as Produto[]); // Retorno vazio temporário para não quebrar a compilação
+    return this.http.get<Produto[]>(this.API_URL);
   }
 
-  buscarPorId(id: number): Observable<Produto> {
-    // TODO: implementar GET /api/products/:id
-    return of({} as Produto); // Retorno vazio temporário para não quebrar a compilação
+  // 2. Consultar um produto pelo ID
+  buscarPorId(id: number | string): Observable<Produto> {
+    return this.http.get<Produto>(`${this.API_URL}/${id}`);
   }
 
+  // 3. Cadastrar um produto
   cadastrar(produto: Produto): Observable<Produto> {
-    // TODO: implementar POST /api/products
-    return of(produto); // Retorno temporário para não quebrar a compilação
+    return this.http.post<Produto>(this.API_URL, produto);
   }
 
-  atualizar(id: number, produto: Produto): Observable<Produto> {
-    // TODO: implementar PUT /api/products/:id
-    return of(produto); // Retorno temporário para não quebrar a compilação
+  // 4. Atualizar um produto
+  atualizar(id: number | string, produto: Produto): Observable<Produto> {
+    return this.http.put<Produto>(`${this.API_URL}/${id}`, produto);
   }
 
-  excluir(id: number): Observable<void> {
-    // TODO: implementar DELETE /api/products/:id
-    return of(undefined); // Retorno temporário para não quebrar a compilação
+  // 5. Excluir um produto
+  excluir(id: number | string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }
